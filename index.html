@@ -1,0 +1,466 @@
+<html>
+<head>
+<style type="text/css">
+	body
+	{
+		font-family: Open Sans,Myriad Pro,sans-serif;
+		position: relative;
+		margin:0px;
+		overflow: hidden;
+	}
+	h1
+	{
+		font-weight: normal;
+		font-size: 100;
+		display: inline;
+		color:#4a0311;
+	}
+	i
+	{
+		color: #eee;
+	}
+
+	/*======================================
+				    INTRO
+	======================================*/
+
+	.intro
+	{
+		background: #81051d;
+		height: 100%;
+		width: 100%;
+		text-align: center;
+	}
+
+	/*======================================
+			    SELECT LEVEL
+	======================================*/
+
+	.rulesandlevel
+	{
+		width: 100%;
+		height: 100%;
+		background: #9c011f;
+		position: relative;
+		top:-100%;
+		left:100%;
+		text-align: center;
+	}
+	.rulesandlevel h1
+	{
+		font-size:50;
+	}
+	.rulesandlevel span
+	{
+		font-size: 20;
+		padding:10px;
+		background: #81051d;
+		color: #eee;
+		margin:10px;
+		padding-right: 20px;
+		padding-left: 20px;
+		border-radius: 2px;
+		margin-top: -10px;
+	}
+	textarea
+	{
+		background: #81051d;
+		color:#fff;
+		border:0px;
+	}
+
+	/*======================================
+			    At the level
+	======================================*/
+
+	.level
+	{
+		width: 100%;
+		height: 100%;
+		background: #ddd;
+		position: relative;
+		top:-100%;
+		left:100%;
+		text-align: center;
+		-webkit-transition: all .2s linear;
+	}
+	.keyboard div
+	{
+		display: inline-block;
+		font-size:20;
+		height: 25px;
+		width: 10px;
+		color: #444;
+		padding:13px;
+		background: #eee;
+		padding-right:22px;
+		padding-left:20px;
+		margin:7px;
+		border-radius:2px;
+		box-shadow:0px 0px 5px #aaa;
+		text-transform: uppercase;
+		-webkit-transition: all .3s ease;
+	}
+	.keyboard .space
+	{
+		height: 25px;
+		width:250px;
+	}
+	.earlyshow
+	{
+		background:#eee;
+		width: 100%;
+		padding-top:50px;
+		padding-bottom:50px;
+	}
+	.text
+	{
+		background:#eee;
+		width: 100%;
+		padding-top:50px;
+		padding-bottom:50px;
+		text-transform: uppercase;
+		font-size:30;
+		-webkit-transition: all .2s linear;
+	}
+	.text span
+	{
+		color:#999;
+	}
+	.text u
+	{
+		font-weight: normal;
+		color: #9c011f;
+		text-decoration:none;
+		border-bottom:1px dotted #9c011f;
+	}
+	.results div
+	{
+		text-align: center;
+		color:#eee;
+		padding:30px;
+		display:inline-block;
+		margin:0px;
+	}
+	.timer
+	{
+		width:60px;
+	}
+	.results
+	{
+		background: #333;
+		padding-bottom:100%;
+		position: relative;
+		-webkit-transition:background .5s linear;
+	}
+	a{
+		text-decoration: none;
+		color:#eee;
+		padding:10px;
+		background:#9c011f;
+	}
+</style>
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("a").hide();
+	$(".text,.intro h1,.intro p,.rulesandlevel h1,.rulesandlevel p,.rulesandlevel i,.rulesandlevel span,.level,textarea, p.custominfo, p.levelrule").hide();
+
+	var flag=0;
+	var charset="abcdefghijklmnopqrstuvwxyz".split("");
+	var keyboard="qwertyuiopasdfghjklzxcvbnm".split("");
+	var x="<div class=q>q</div>";
+	var custom='n';
+	var highlight;
+	var nohighlight;
+	var ct=0;
+	var finaltext;
+	var altered;
+	for(var i=1;i<26;i++){
+		if(i==18)
+		{
+			x=x+"<div class="+keyboard[i]+">"+keyboard[i]+"</div><br>";
+		}
+		else if(i==9)
+		{
+			x=x+"<div class="+keyboard[i]+">"+keyboard[i]+"</div><br>";
+		}
+		else if(i==25)
+		{
+			x=x+"<div class="+keyboard[i]+">"+keyboard[i]+"</div><br><div class=space> </div>";
+		}
+		else
+			x=x+"<div class="+keyboard[i]+">"+keyboard[i]+"</div>";
+	}
+	$(".keyboard").html(x);
+	
+
+
+
+
+
+
+
+	var easy=["this is one of the easy strings","this is second of the easy strings","this is third of the easy strings"];
+	var medium=["this is one of the medium strings","this is second of the medium strings","this is third of the medium strings"];
+	var hard=["this is one of the hard strings","this is second of the hard strings","this is third of the hard strings"];
+
+
+
+	var random=Math.floor(Math.random()*2.9);
+	console.log(random);
+
+
+
+
+	
+	$(".text").html(finaltext);
+
+	
+	var correct=0;
+	var wrong=0;
+	var time=0;
+
+	
+	$(".intro h1").fadeIn(1000,function(){
+		$(".intro p").fadeIn(1000);
+
+	});
+
+
+	$(window).keydown(function(e){
+		//taking keycode of the key
+		var keycode= e.which;
+		console.log(keycode);
+		var key;
+		var actualkeytyped;
+
+		for(i=0;i<26;i++)
+		{
+			if(keycode==i+65)
+			{
+				key=charset[i];
+				actualkeytyped=key;
+			}
+		}
+
+		if(keycode==16)
+		{
+			key="shift";
+		}
+
+		if(keycode==32)
+		{
+			key="space";
+			actualkeytyped=" ";
+		}
+		
+		//Takes you to the rules
+		if(flag==0)
+		{
+			if(keycode==39)
+			{
+				$("body").animate({"left":"-100%"},1000);
+				flag=1;
+			}
+		}
+		//At the rules, flag set to 1
+
+		//Choosing level
+		if(flag==1){
+			$(".rulesandlevel h1").fadeIn(1500,function(){
+				$(".rulesandlevel p.levelrule").fadeIn(1000,function(){
+					$(".rulesandlevel i").fadeIn(2000,function(){
+						$(".rulesandlevel span").fadeIn(1000);
+
+					});
+				});
+			});
+			if(key=='c'||key=='C'){
+				$("textarea").fadeIn(1000);
+				$("p.custominfo").fadeIn(1000);
+				custom='y';
+			}
+			if(keycode==17&&custom=='y'){
+				var customtext = $("textarea").val().toLowerCase();
+				customtext=customtext.replace(/[^a-zA-Z ]/g, "");
+				console.log(customtext);
+				finaltext=customtext.split("");
+				console.log(finaltext);
+				$(".text").html(finaltext);
+				$("body").animate({"top":"-100%"},1000);
+				flag=2;
+			}
+			else if((key=="e"||key=="E"||key=="m"||key=="M"||key=="h"||key=="H")&&custom=='n')
+			{
+				$("body").animate({"top":"-100%"},1000);
+				flag=2;
+			}	
+
+			if(key=="e"||key=="E")
+			{
+				finaltext=easy[random].split("");
+				$(".text").html(finaltext);
+			}
+			if(key=="m"||key=="M")
+			{
+				finaltext=medium[random].split("");
+				$(".text").html(finaltext);
+			}
+			if(key=="h"||key=="H")
+			{
+				finaltext=hard[random].split("");
+				$(".text").html(finaltext);
+			}
+
+
+		}
+		//If key is shift capitalizing
+		if(keycode==16)
+		{
+			$(".keyboard div").css({"text-transform":"uppercase"});
+		}
+
+		//Keyboard key coloring
+		$(".keyboard ."+key).css({"background":"#81051d","color":"#eee"});
+		
+	
+
+		if(flag==3){
+
+
+		if(finaltext[ct]==actualkeytyped)
+		{
+			finaltext[ct]="<span>"+finaltext[ct]+"</span>";
+			ct++;
+			correct++;
+			$(".correct span").html(correct);
+		}
+		else
+		{
+			finaltext[ct]="<u>"+finaltext[ct]+"</u>";
+			ct++;
+			wrong++;
+			$(".level").css({"background":"#81051d"});
+			$(".text").css({"background":"#81051d"});
+			$(".incorrect span").html(wrong);
+		}
+		
+		var accuracy=correct*100/ct;
+		accuracy=Math.floor(accuracy);
+		$(".accuracy span").html(accuracy+"%");
+		var min=time/60000;
+		$(".cpm span").html(Math.floor(ct/min));
+		$(".wpm span").html(Math.floor(ct/(min*7)));
+		
+		$(".text").html(finaltext);
+		if(ct==finaltext.length)
+		{
+			flag=4;
+			var finaltime=Math.floor(time/1000);
+			$(".timer").html("TIME:<br><span class=timee>"+finaltime+"</span>s");
+
+		}
+
+		if(finaltext[ct]==' ')
+			highlight="space";
+		else 
+			highlight=finaltext[ct];
+		console.log(finaltext[ct]);
+		$("div." + highlight).css({"box-shadow":"0px 0px 10px #81051d"});
+		/*if(finaltext[ct-1]==' ')
+			nohighlight="space";
+		else 
+			nohighlight=finaltext[ct-1];
+		console.log(nohighlight);*/
+
+
+		}
+
+
+		if(flag==4)
+		{
+			$(".results").animate({"top":"-500px"},1000);
+			$("a").fadeIn(1000);
+			$(".results").css({"background":"#81051d"});
+
+		}
+
+
+		if(flag==2)
+		{	
+			$(".level").fadeIn(3000);
+			if(keycode==13)
+			{
+				$(".earlyshow").slideUp(200);
+				$(".text").slideDown(200);
+				flag=3;
+				function timer(){
+				time+=10;
+				$(".time").html(time/1000);
+				}
+
+				var int=self.setInterval(timer,10);
+			}
+		}
+
+
+
+		
+
+	});
+
+
+	$(window).keyup(function(s){
+		$(".keyboard div").css({"background":"#eee","color":"#444","box-shadow":"0px 0px 5px #aaa"});
+		$(".level").css({"background":"#ddd"});
+		$(".text").css({"background":"#eee"});
+	});
+});
+</script>
+</head>
+<body>
+<div class=intro>
+	<br>
+	<h1>Typ<i>r</i></h1>
+	<p>Typr is a touch typing app designed to help you increase your typing speed<br>
+	This app has been developed by <b>Shikhar Sahdev</b> and <b>Rishabh Aggarwal</b> and is<br>
+	our first html web app. We hope you like using this app and it helps increase your typing speed.<br>
+	P.S. This being a typing app, we request you to keep your MICE ASIDE.<br><br>
+	<i>Press Right Arrow to continue.</i>
+	
+	</p>
+</div>
+
+<div class=rulesandlevel>
+	<h1><br>So, let's begin:</h1>
+	<p class="levelrule">
+		You would be required to type the random text shown on the screen.<br>
+		Don't even touch the Caps Lock button, set it to lowercase before beginning and type everything in lower case.<br>
+		You will be given a report on how your typing is after completion of the given text.</p>
+		<i>Select your difficulty level.</i><br><br><br>
+		<span>easy (e)</span><span>medium (m)</span><span>hard (h)</span><span>Custom text (c)</span><br><br>
+		<p class="custominfo">Enter text in this field which can be selected by pressing Tab. Please enter only alphabets and press<br>
+		ctrl key to continue</p>
+		<textarea></textarea>
+	
+</div>
+
+<div class=level>
+	<div class=earlyshow><b>PRESS ENTER TO BEGIN YOUR TEST</b></div>
+	<div class=text></div>
+	<br><br>
+	<div class=keyboard></div><br><br>
+	<div class=results>
+		<div class=timer>TIME:<br><span class=time>0</span>s</div>
+		<div class=correct>CORRECT:<br><span>0</span></div>
+		<div class=cpm>Characters per minute:<br><span>0</span></div>
+		<div class=wpm>Words per minute:<br><span>0</span></div>
+		<div class=incorrect>INCORRECT:<br><span>0</span></div>
+		<div class=accuracy>ACCURACY:<br><span>0%</span></div>
+		<br><a href="index.html">The above is your final result.Now you can hold your mouse. Click here to play again or press F5.</a>
+	</div>
+</div>
+</body>
+</html>
